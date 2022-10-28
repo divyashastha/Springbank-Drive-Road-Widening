@@ -1,0 +1,74 @@
+rm(list=ls(all=TRUE)) #clears memory
+options(digits=12) #keeps 12 digits in memory, otherwise summary statistics may be off due to rounding
+
+#Set working directory by clicking on Session --> set working directory --> to source file location
+
+SpringBankdrive <- read.csv("SpringbankDrive_EDA.csv", header=TRUE)  # imports and renames dataset
+colnames(SpringBankdrive)
+
+
+
+
+#Extract variables to be used in the analyses
+Price <- SpringBankdrive[,"PRICE"] #no number before comma means select all rows
+HouseType <- SpringBankdrive[,"HOUSE_TYPE"]
+OneNHalfStorey <- SpringBankdrive[,"ONE_AND_HALF_STOREY"]
+TwoStorey <- SpringBankdrive[,"TWO_STOREY"]
+HouseAge <- SpringBankdrive[,"HOUSE_AGE_YR"]
+AreaFrontage <- SpringBankdrive[,"AREA_OF_FRONTAGE"]
+ExteriorAmenities <- SpringBankdrive[,"EXTERIOR_AMENITIES"]
+MinorExtAmenities <- SpringBankdrive[,"MINOR_EXT_AMENENITIES"]
+TwoThreeExtAmenities <- SpringBankdrive[,"TWO_THREE_EXT_AMENITIES"]
+Morethan3Amenities <- SpringBankdrive[,"MORE_THAN_THREE_EXT_AMENITIES"]
+ExtFinFactor <- SpringBankdrive[,"EXTFINFACTOR"]
+OnlyBrick <- SpringBankdrive[,"ONLY_BRICK"]
+Garage <- SpringBankdrive[,"GARAGE"]
+Carport <- SpringBankdrive[,"CARPORT"]
+OneCarGarage <- SpringBankdrive[,"ONE_CAR_GARAGE"]
+TwoCarGarage <- SpringBankdrive[,"TWO_CAR_GARAGE"]
+Streetscape <- SpringBankdrive[,"STREETSCAPE"]
+AverageView <- SpringBankdrive[,"AVERAGE_VIEW"]
+GoodView <- SpringBankdrive[,"GOOD_VIEW"]
+Pool <- SpringBankdrive[,"POOL"]
+CentralAir <- SpringBankdrive[,"CENTRAL_AIR"]
+InteriorCondition <- SpringBankdrive[,"INTERIOR_CONDITION"]
+AvgIntCondition <- SpringBankdrive[,"AVG_INT_CONDITION"]
+GoodIntCondition <- SpringBankdrive[,"GOOD_INT_CONDITION"]
+ExcIntCondition <- SpringBankdrive[,"EXC_INT_CONDITION"]
+BasementFinArea <- SpringBankdrive[,"BASEMENT_FIN_AREA"]
+InteriorAmenities <- SpringBankdrive[,"INTERIOR_AMENITIES"]
+LaneSideroad <- SpringBankdrive[,"LANE_SIDEROAD"]
+TrafficCount <- SpringBankdrive[,"TRAFFIC_COUNT"]
+
+
+
+
+#Generate correlation matrix for Model 1
+
+round(cor(cbind(Price, AreaFrontage, LaneSideroad, OneNHalfStorey, TwoStorey, HouseAge,
+                AverageView, GoodView, Pool, CentralAir,
+                AvgIntCondition, GoodIntCondition, ExcIntCondition, BasementFinArea)),3)#cbind creates a matrix
+
+#Regress Price on Frontage Area, Lanes and relevant Control Variables
+mod1 <- lm(Price ~ AreaFrontage + LaneSideroad + OneNHalfStorey + TwoStorey + HouseAge 
+            + AverageView + GoodView + Pool + CentralAir 
+            + AvgIntCondition + GoodIntCondition + ExcIntCondition + BasementFinArea )
+
+#Present Parameter Estimates, Coefficient of Determination, etc. for Model 1
+summary(mod1)
+
+#Generate correlation matrix for Model 2
+
+round(cor(cbind(Price, AreaFrontage, TrafficCount, OneNHalfStorey, TwoStorey, HouseAge,
+                AverageView, GoodView, Pool, CentralAir,
+                AvgIntCondition, GoodIntCondition, ExcIntCondition, BasementFinArea)),3)#cbind creates a matrix
+
+#Regress Price on Frontage Area, Lanes and relevant Control Variables
+mod2 <- lm(Price ~ AreaFrontage + TrafficCount + OneNHalfStorey + TwoStorey + HouseAge 
+           + AverageView + GoodView + Pool + CentralAir 
+           + AvgIntCondition + GoodIntCondition + ExcIntCondition + BasementFinArea )
+
+#Present Parameter Estimates, Coefficient of Determination, etc. for Model 1
+summary(mod2)
+
+
